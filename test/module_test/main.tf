@@ -79,6 +79,10 @@ module "azure-datalake" {
   sql_server_admin_username       = random_pet.sql.id
   sql_server_admin_password       = random_password.sql.result
   provision_databricks_resources  = true
-  provision_synapse               = false
+  #provision_synapse               = false
   extra_tags                      = local.tags
+  provision_synapse               = true
+  data_warehouse_dtu              = "DW100c"
+  use_key_vault                   = true
+  use_log_analytics               = true
 }

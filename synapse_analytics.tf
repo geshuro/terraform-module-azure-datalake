@@ -16,8 +16,8 @@ resource "azurerm_sql_database" "synapse" {
   resource_group_name              = var.resource_group_name
   server_name                      = azurerm_sql_server.synapse_srv[count.index].name
   tags                             = local.common_tags
-  edition                          = "DataWarehouse"
-  requested_service_objective_name = var.data_warehouse_dtu
+  edition                          = "Standard"
+  #requested_service_objective_name = var.data_warehouse_dtu
 }
 
 resource "azurerm_sql_firewall_rule" "allow_azure_services" {

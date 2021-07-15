@@ -4,6 +4,6 @@ variable "test_id" {
 }
 
 variable "region" {
-  default = "eastus2"
+  default = "westus2"
   type    = string
 }

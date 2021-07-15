@@ -55,13 +55,13 @@ variable "log_analytics_workspace_id" {
   default     = ""
   description = "Optional Log Analytics Workspace ID where logs are stored"
 }
-
+/*
 variable "cosmosdb_partition_key" {
   type        = string
   default     = "/sourceTimestamp"
   description = "Set the partition key for the Cosmos DB metadata collection"
 }
-
+*/
 variable "storage_replication" {
   description = "Type of replication for the storage accounts. See https://www.terraform.io/docs/providers/azurerm/r/storage_account.html#account_replication_type"
   type        = string
@@ -73,11 +73,13 @@ variable "data_warehouse_dtu" {
   default     = null
 }
 
+/*
 variable "cosmosdb_consistency_level" {
   description = "Default consistency level for the CosmosDB account"
   type        = string
   default     = "Session"
 }
+*/
 
 variable "databricks_cluster_node_type" {
   type        = string

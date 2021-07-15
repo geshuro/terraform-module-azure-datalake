@@ -15,7 +15,7 @@ resource "databricks_instance_pool" "pool" {
   count                                 = local.create_databricks_count
   instance_pool_name                    = "dl-pool"
   min_idle_instances                    = 0
-  max_capacity                          = 10
+  max_capacity                          = 3
   node_type_id                          = var.databricks_cluster_node_type
   idle_instance_autotermination_minutes = 10
   enable_elastic_disk                   = true
@@ -32,7 +32,7 @@ resource "databricks_cluster" "cluster" {
 
   autoscale {
     min_workers = 1
-    max_workers = 4
+    max_workers = 2
   }
 
   dynamic "cluster_log_conf" {
@@ -60,6 +60,7 @@ resource "databricks_secret" "client_secret" {
   scope        = databricks_secret_scope.adls[count.index].name
 }
 
+/*
 resource "databricks_secret_scope" "cosmosdb" {
   count                    = local.create_databricks_count
   depends_on               = [azurerm_role_assignment.spdbks]
@@ -74,7 +75,7 @@ resource "databricks_secret" "cmdb_master" {
   string_value = azurerm_cosmosdb_account.cmdb.primary_master_key
   scope        = databricks_secret_scope.cosmosdb[count.index].name
 }
-
+*/
 resource "databricks_azure_adls_gen2_mount" "fs" {
   for_each               = local.create_databricks_bool ? toset(var.data_lake_filesystems) : toset([])
   container_name         = each.key

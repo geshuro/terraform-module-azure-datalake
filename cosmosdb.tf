@@ -1,3 +1,5 @@
+
+/* No se requiere este recurso
 resource "azurerm_cosmosdb_account" "cmdb" {
   name                = "cmdb${var.data_lake_name}"
   resource_group_name = var.resource_group_name
@@ -33,3 +35,4 @@ resource "azurerm_cosmosdb_sql_container" "metadata" {
   database_name       = azurerm_cosmosdb_sql_database.cmdb_db.name
   partition_key_path  = var.cosmosdb_partition_key
 }
+*/
