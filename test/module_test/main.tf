@@ -1,5 +1,10 @@
 provider "azurerm" {
-  features {}
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy    = false
+      recover_soft_deleted_key_vaults = false
+    }
+  }
 }
 
 resource "random_string" "test_id" {
@@ -28,7 +33,7 @@ provider "databricks" {
 }
 
 resource "azuread_application" "sp" {
-  name = "app-${local.data_lake_name}"
+  display_name = "app-${local.data_lake_name}"
   required_resource_access {
     resource_app_id = "e406a681-f3d4-42a8-90b6-c2b029497af1"
     resource_access {
@@ -76,13 +81,12 @@ module "azure-datalake" {
   service_principal_client_secret = azuread_service_principal_password.sp.value
   service_principal_object_id     = azuread_service_principal.sp.object_id
   databricks_workspace_name       = azurerm_databricks_workspace.dbks.name
-  sql_server_admin_username       = random_pet.sql.id
+  sql_server_admin_username       = "admdatalake"
+  #sql_server_admin_username       = random_pet.sql.id
   sql_server_admin_password       = random_password.sql.result
   provision_databricks_resources  = true
-  #provision_synapse               = false
-  extra_tags                      = local.tags
-  provision_synapse               = true
-  data_warehouse_dtu              = "DW100c"
+  provision_db                    = true
   use_key_vault                   = true
   use_log_analytics               = true
+  extra_tags                      = local.tags
 }

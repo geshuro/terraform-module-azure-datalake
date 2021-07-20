@@ -50,7 +50,7 @@ Example: `"Session"`
 
 ### `data_warehouse_dtu`
 
-The provisioned Data Warehouse Units for the Azure Synapse Analytics instance. We recommend to scale this as you go.\
+The provisioned Data Warehouse Units for the Azure db Analytics instance. We recommend to scale this as you go.\
 [Data Warehouse Units](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/what-is-a-data-warehouse-unit-dwu-cdwu)
 
 Required unless you disable the Synapse Analytics Instance with `provision_synapse` set to `false`\

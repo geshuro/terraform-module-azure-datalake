@@ -7,7 +7,7 @@ resource "azurerm_data_factory" "df" {
   identity {
     type = "SystemAssigned"
   }
-
+/*
   dynamic "vsts_configuration" {
     for_each = local.create_data_factory_git_vsts_set
     content {
@@ -30,6 +30,7 @@ resource "azurerm_data_factory" "df" {
       root_folder     = var.data_factory_github_root_folder
     }
   }
+*/
 }
 
 resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {
@@ -42,6 +43,38 @@ resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {
   service_principal_key = var.service_principal_client_secret
   depends_on            = [azurerm_role_assignment.spsa_sa_adls]
   count                 = local.create_data_factory_ls_count
+}
+
+resource "azurerm_data_factory_linked_service_key_vault" "kvlink" {
+  name                = "kvlink"
+  resource_group_name = var.resource_group_name
+  data_factory_name   = azurerm_data_factory.df.name
+  key_vault_id        = azurerm_key_vault.kvlt.id
+}
+
+resource "azurerm_data_factory_linked_service_sql_server" "lssqldb" {
+  count                           = local.create_db_count
+  name                            = "lssqldb"
+  resource_group_name             = var.resource_group_name
+  data_factory_name               = azurerm_data_factory.df.name
+
+  connection_string = "Integrated Security=False;Data Source=${azurerm_mssql_server.db_srv[count.index].fully_qualified_domain_name};Initial Catalog=${azurerm_mssql_database.db[count.index].name};User ID=${var.sql_server_admin_username};"
+  key_vault_password {
+    linked_service_name = azurerm_data_factory_linked_service_key_vault.kvlink.name
+    secret_name         = azurerm_key_vault_secret.sql_key[count.index].name
+  }
+}
+
+resource "azurerm_data_factory_linked_service_azure_sql_database" "datawarehouse" {
+  count                           = local.create_db_count
+  name                            = "datawarehouse"
+  resource_group_name             = var.resource_group_name
+  data_factory_name               = azurerm_data_factory.df.name
+  connection_string               = "data source=${azurerm_mssql_server.db_srv[count.index].fully_qualified_domain_name};initial catalog=${azurerm_mssql_database.db[count.index].name};user id=${var.sql_server_admin_username};integrated security=False;encrypt=True;connection timeout=30"
+  key_vault_password {
+    linked_service_name = azurerm_data_factory_linked_service_key_vault.kvlink.name
+    secret_name         = azurerm_key_vault_secret.sql_key[count.index].name
+  }
 }
 
 resource "azurerm_template_deployment" "lsdbks" {

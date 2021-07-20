@@ -11,7 +11,7 @@ variable "region" {
 variable "data_lake_filesystems" {
   type        = list(string)
   description = "A list of filesystems to create inside the storage account"
-  default     = ["raw", "clean", "curated", "integration", "aggregation"]
+  default     = ["raw", "curated", "serving"]
 }
 
 variable "databricks_cluster_version" {
@@ -20,9 +20,9 @@ variable "databricks_cluster_version" {
   default     = "7.2.x-scala2.12"
 }
 
-variable "provision_synapse" {
+variable "provision_db" {
   type        = bool
-  description = "Set this to false to disable the creation of the Synapse Analytics instance."
+  description = "Set this to false to disable the creation of the db Analytics instance."
   default     = true
 }
 
@@ -65,12 +65,6 @@ variable "cosmosdb_partition_key" {
 variable "storage_replication" {
   description = "Type of replication for the storage accounts. See https://www.terraform.io/docs/providers/azurerm/r/storage_account.html#account_replication_type"
   type        = string
-}
-
-variable "data_warehouse_dtu" {
-  description = "Service objective (DTU) for the created data warehouse (e.g. DW100c)"
-  type        = string
-  default     = null
 }
 
 /*
@@ -248,4 +242,15 @@ variable "databricks_workspace_resource_group_name" {
 variable "resource_group_name" {
   description = "Name of the resource group where the resources should be created"
   type        = string
+}
+
+##New
+variable "mssql_version" {
+  description = "The version of the MSSQL Server"
+  default     = "12.0"
+}
+
+variable "ssl_minimal_tls_version_enforced" {
+  description = "The mimimun TLS version to support on the sever"
+  default     = "1.2"
 }

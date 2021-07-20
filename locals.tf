@@ -5,7 +5,7 @@ locals {
   }
   common_tags = merge(local.own_tags, var.extra_tags)
 
-  create_synapse_count               = var.provision_synapse ? 1 : 0
+  create_db_count                    = var.provision_db ? 1 : 0
   create_data_factory_git_vsts_set   = var.data_factory_vsts_account_name == "" ? toset([]) : toset(["_"])
   create_data_factory_git_github_set = var.data_factory_github_account_name == "" ? toset([]) : toset(["_"])
   create_data_factory_ls_count       = var.provision_data_factory_links ? 1 : 0

@@ -4,13 +4,13 @@ output "name" {
 }
 
 output "sql_dw_server_hostname" {
-  description = "Name of the SQL server that hosts the Azure Synapse Analytics instance"
-  value       = var.provision_synapse == 1 ? azurerm_sql_server.synapse_srv[0].fully_qualified_domain_name : ""
+  description = "Name of the SQL server that hosts the Azure db Analytics instance"
+  value       = var.provision_db == 1 ? azurerm_mssql_server.db_srv[0].fully_qualified_domain_name : ""
 }
 
 output "sql_dw_server_database" {
-  description = "Name of the Azure Synapse Analytics instance"
-  value       = var.provision_synapse == 1 ? azurerm_sql_database.synapse[0].name : ""
+  description = "Name of the Azure db Analytics instance"
+  value       = var.provision_db == 1 ? azurerm_mssql_database.db[0].name : ""
 }
 
 output "created_key_vault_secrets" {
